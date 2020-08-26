@@ -7,7 +7,9 @@ public class Car {
     private int maxSpeed;
     private int ccm;
     private int consumption;
-    private int mileage;
+    private double mileage;
+    private double fuel;
+    private int maxFuel;
     
     public Car (){
         this.model = "undefined";
@@ -17,6 +19,7 @@ public class Car {
         this.ccm = -1;
         this.consumption = 0;
         this.mileage = 0;
+        this.fuel = 0;
     }
     
     public Car (String customModel, int customBuildYear, String customColor, int CustomMaxSpeed, int customCcm){
@@ -26,6 +29,7 @@ public class Car {
         this.maxSpeed = CustomMaxSpeed;
         this.ccm = customCcm;
         this.mileage = 0;
+        this.fuel = 0;
     }
 
     public Car(String model, int buildYear, String color, int maxSpeed, int ccm, int consumption, int mileage) {
@@ -36,6 +40,7 @@ public class Car {
         this.ccm = ccm;
         this.consumption = consumption;
         this.mileage = mileage;
+        this.fuel = 0;
     }         
     
     public String getModel() {
@@ -86,12 +91,28 @@ public class Car {
         this.consumption = consumption;
     }
     
-     public int getMileage() {
+     public double getMileage() {
         return mileage;
     }
 
-    public void setMileage(int mileage) {
+    public void setMileage(double mileage) {
         this.mileage = mileage;
+    }
+
+    public double getFuel() {
+        return fuel;
+    }
+
+    public void setFuel(double fuel) {
+        this.fuel = fuel;
+    }
+
+    public int getMaxFuel() {
+        return maxFuel;
+    }
+
+    public void setMaxFuel(int maxFuel) {
+        this.maxFuel = maxFuel;
     }
 
     public void printAttributes(){
@@ -101,14 +122,40 @@ public class Car {
         System.out.println("Boja: " + this.getColor());
         System.out.println("Potrosnja: " + this.getConsumption());
         System.out.println("Kilometraza: " + this.getMileage());
+        System.out.println("Trenutno goriva : " + this.getFuel() + " l");
         System.out.println("Maksimalna brzina: " + this.getMaxSpeed());
         System.out.println();
     }
 
    
     
-    public void goToTravel(int distance){
-        this.setMileage(this.getMileage() + distance);
+    public void goToTravel(double distance){
+        double fuelNeededForTravel = (distance / 100)* this.getConsumption();
+        System.out.println("Medjuprovera " + fuelNeededForTravel);
+        
+        if (this.getFuel() >= fuelNeededForTravel){
+            System.out.println("Uspesno smo presli put od: " + distance);
+           this.setMileage(this.getMileage() + distance);
+           this.setFuel(this.getFuel()- fuelNeededForTravel);
+        }
+        else{
+            System.out.println("Nemamo dovoljno goriva za put od: " + distance + " kilometara.");
+        }
+        
+        
+    }
+    
+    public void fuelUp (int newFuel){             
+        if (this.getFuel() + newFuel <= this.getMaxFuel()){
+            this.setFuel(this.getFuel() + newFuel);
+            System.out.println("Sipano je: " + newFuel + " l goriva. Trenutno stanje je: " + this.getFuel() + " l goriva.");
+        }
+        else{
+            System.out.println("Rezervoar je sada pun (" + this.getMaxFuel() + ")a sipano je: " + (this.getMaxFuel()-this.getFuel()) + " od pokusanih " + newFuel);
+            this.setFuel(this.getMaxFuel());
+        }
+        
+        
     }
     
 }
